@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="module" src="./chat.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <div id="app">
+    <h1>
+      My Cool Chat App
+    </h1>
+
+    <p>
+      <button @click="$gf.toggleLogIn">
+        <!-- If we have a user ID, we're logged in so show "Log Out" -->
+        <!-- Otherwise, show "Log In" -->
+        {{ $gf.me? 'Log Out' : 'Log In' }}
+      </button>
+    </p>
+
+    <!-- If we're not logged in, hide everything except the login button -->
+    <template v-if="$gf.me">
+      <p>
+      <form @submit.prevent="resolver.requestUsername(preferredUsername).
+          then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
+        <input v-model="preferredUsername" placeholder="Choose a Username" />
+        <!-- <input type="submit" value="Set Username"/> -->
+        <button type="submit">Set Username</button>
+      </form>
+      {{ usernameResult }}
+      </p>
+      <p>
+        My Username: {{ myUsername }}
+      </p>
+
+
+      <p>
+        <!-- We display names in multiple places, so we made a -->
+        <!-- reusable <name></name> component. -->
+        <!-- See below for the template. -->
+        My Name: <name :actor="$gf.me" :editable="true"></name>
+      </p>
+      <!-- <p>
+        Enter a Username: <span> {{ requestUsername }} </span> 
+        <input v-model="requestUsername"/> 
+        <button @click="requestUsernameChange">Change Username</button>
+      </p> -->
+
+      <div class="middle">
+        <p>
+          Change chat format:
+          <input type="radio" id="channel" :value="false" v-model="privateMessaging" />
+          <label for="channel">Channel-based public chat</label>
+          <input type="radio" id="pm" :value="true" v-model="privateMessaging" />
+          <label for="pm">Private Messaging</label>
+        </p>
+      </div>
+
+      <p v-if="!privateMessaging">
+        <!-- <label for="channel">
+          Change the channel you're chatting in:
+        </label>
+        <input id="channel" v-model="channel" /> -->
+      </p>
+      <p v-else>
+        <label for="recipient">
+          Search Username:
+        </label>
+        <input id="recipient" v-model="recipient" />
+        <button @click="searchRecipient">Search</button>
+        <span id="progress"></span>
+        <br>
+        <label for="actorID">
+          Actor ID:
+          <input id="actorID" v-model="actorID" />
+        </label>
+      </p>
+
+      <!-- A form for sending messages -->
+        <form @submit.prevent="sendMessage">
+          <input class="typemessage" v-model="messageText" placeholder="Type a message..." />
+          <input class="sendbutton" type="submit" value="Send" />
+          <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg"/>
+        </form>
+
+
+      <!-- List all the messages -->
+      <form v-for="message of messages" :key="message.id">
+
+        <!-- Display and edit form if we're editing a message -->
+        <form v-if="editID==message.id" @submit.prevent="saveEditMessage(message)">
+          <input v-model="editText">
+          <input type="submit" value="Save" />
+        </form>
+
+        <!-- Otherwise, display a bunch of properties from the message -->
+        <form v-else>
+          <div v-if="message.attachment">
+            <div v-if="message.attachment.magnet in this.downloadedImages">
+              <img :src="downloadedImages[message.attachment.magnet]"/>
+            </div>
+            <div v-else>
+              Loading
+            </div>
+            <!-- {{ message.attachment }} -->
+          </div>
+
+          <div class="message">
+            <template v-if="message.actor === $gf.me"><div class="right"></div></template>
+            <template v-else><div class="left"></div></template>
+            
+            <template v-if="!privateMessaging">
+              <div> <b>Name: </b>
+                <name :actor="message.actor"></name> &nbsp; <b>Username:</b> <span class="username">{{
+                  getUsername(message.actor) }}</span>
+                &nbsp; <b>Actor ID:</b> {{ message.actor }}
+              </div>
+            </template>
+
+            <template v-if="privateMessaging">
+              <div><b>Name:</b>
+                <name :actor="message.actor"></name>
+                <!-- &nbsp; <b>To Actor ID:</b> {{ message.bto[0] }} -->
+              </div>
+            </template>
+            &nbsp;
+            <div><b>Message:</b> {{ message.content }}</div>
+            &nbsp;
+            <div><b>Published at Time:</b> {{ message.published }}</div>
+            <div><b>Last Edited at Time:</b> {{ message.updated }}</div>
+            <!-- This is a unique identifier that can be used to "link" to messages -->
+            <!-- <div>ID: {{ message.id }}</div> -->
+
+            <!-- Only add these controls if the message is ours -->
+            <!-- You can't edit or delete other people's messages -->
+            <div>
+              <template v-if="message.actor==$gf.me">
+                <button id="buttonchat" @click="removeMessage(message)">
+                  Delete Message
+                </button>
+
+                <button id="buttonchat" @click="startEditMessage(message)">
+                  Edit Message
+                </button>
+              </template>
+            </div>
+
+    </template>
+  </div>
+  </div>
+
+  <template id="name">
+    <span v-if="!editing">
+
+      <!-- If we're not editing the name-->
+      <!-- Display the profile's name, if it exists -->
+      <!-- or anonymous if it doesn't -->
+      {{ profile? profile.name : 'Anonymous' }}
+
+      <!-- Also if the name is "editable" add an edit button -->
+      <button v-if="editable" @click="editName">
+        Edit Name
+      </button>
+    </span>
+
+    <!-- If we're in the editing state, create something to edit the name-->
+    <form v-else @submit.prevent="saveName">
+      <input v-model="editText" />
+      <input type="submit" value="Save Name" />
+    </form>
+  </template>
+</body>
+
+</html>
