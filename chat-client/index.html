@@ -97,16 +97,6 @@
 
         <!-- Otherwise, display a bunch of properties from the message -->
         <form v-else>
-          <div v-if="message.attachment">
-            <div v-if="message.attachment.magnet in this.downloadedImages">
-              <img :src="downloadedImages[message.attachment.magnet]"/>
-            </div>
-            <div v-else>
-              Loading
-            </div>
-            <!-- {{ message.attachment }} -->
-          </div>
-
           <div class="message">
             <template v-if="message.actor === $gf.me"><div class="right"></div></template>
             <template v-else><div class="left"></div></template>
@@ -128,6 +118,15 @@
             &nbsp;
             <div><b>Message:</b> {{ message.content }}</div>
             &nbsp;
+            <div v-if="message.attachment">
+              <div v-if="message.attachment.magnet in this.downloadedImages">
+                <img :src="downloadedImages[message.attachment.magnet]"/>
+              </div>
+              <div v-else>
+                Loading
+              </div>
+              <!-- {{ message.attachment }} -->
+            </div>
             <div><b>Published at Time:</b> {{ message.published }}</div>
             <div><b>Last Edited at Time:</b> {{ message.updated }}</div>
             <!-- This is a unique identifier that can be used to "link" to messages -->
