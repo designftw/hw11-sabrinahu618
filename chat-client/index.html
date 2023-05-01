@@ -148,6 +148,7 @@
 
             <div>
                 <like :messageid="message.id"></like>
+                <read :readid="message.id"></read>
             </div>
 
     </template>
@@ -179,6 +180,9 @@
     <button @click="toggleLike">
       {{ myLikes.length? 'Unlike' : 'Like' }} {{ numLikes }}
     </button>
+  </template>
+
+  <template id="read"> Read: {{ ...new Set(usernames) }}
   </template>
 
 </body>

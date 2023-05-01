@@ -42,7 +42,7 @@ const app = {
 
   setup() {
     // Initialize the name of the channel we're chatting in
-    const channel = Vue.ref('default')
+    const channel = Vue.ref('sharon')
 
     // And a flag for whether or not we're private-messaging
     const privateMessaging = Vue.ref(false)
@@ -352,7 +352,69 @@ const Like = {
 }
 
 
-app.components = { Name, Like }
+
+
+
+const Read = {
+  props: ["readid"],
+
+  setup(props) {
+    const $gf = Vue.inject('graffiti')
+    const readid = Vue.toRef(props, 'readid')
+    const { objects: readRaw } = $gf.useObjects([readid])
+    return { readRaw }
+  },
+
+  created() {
+    this.resolver = new Resolver(this.$gf)
+  },
+
+  data() {
+    return {
+      usernames: [],
+    }
+  },
+
+  mounted() {
+    if (!this.myRead.length){
+      this.$gf.post({
+        type: 'Read',
+        object: this.readid,
+        context: [this.readid]
+      })
+    }
+  },
+
+  computed: {
+    read() {
+      return [...new Set(this.readRaw.filter(r=>
+        r.type == 'Read' &&
+        r.object == this.readid).map(r=>r.actor))].sort()
+    },
+
+
+    myRead() {
+      return this.read.filter(r=> r.actor == this.$gf.me)
+    }
+
+  },
+
+  watch: {
+    read() {
+      // Promise.allSettled(this.read.map(this.resolver.actorToUsername)).then(usernames => this.usernames = usernames)
+      this.usernames = []
+
+      this.read.forEach(async r => {
+        const username = await this.resolver.actorToUsername(r);
+        this.usernames.push(username);
+      })
+    }
+  },
+
+  template: '#read'
+}
+
+app.components = { Name, Like, Read }
 Vue.createApp(app)
    .use(GraffitiPlugin(Vue))
    .mount('#app')
