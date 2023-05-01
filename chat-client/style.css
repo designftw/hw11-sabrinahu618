@@ -60,3 +60,7 @@ div.message:has(.right) {
 .middle {
     padding-top: 1em;
 }
+
+img {
+    width: 20em;
+}

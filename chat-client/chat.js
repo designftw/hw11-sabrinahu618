@@ -306,7 +306,53 @@ const Name = {
   template: '#name'
 }
 
-app.components = { Name }
+
+const Like = {
+  props: ["messageid"],
+
+  setup(props) {
+    const $gf = Vue.inject('graffiti')
+    const messageid = Vue.toRef(props, 'messageid')
+    const { objects: likesRaw } = $gf.useObjects([messageid])
+    return { likesRaw }
+  },
+
+  computed: {
+    likes() {
+      return this.likesRaw.filter(l=>
+        l.type == 'Like' &&
+        l.object == this.messageid)
+    },
+
+    numLikes() {
+      // Unique number of actors
+      return [...new Set(this.likes.map(l=>l.actor))].length
+    },
+
+    myLikes() {
+      return this.likes.filter(l=> l.actor == this.$gf.me)
+    }
+  },
+
+  methods: {
+    toggleLike() {
+      if (this.myLikes.length) {
+        this.$gf.remove(...this.myLikes)
+      } else {
+        this.$gf.post({
+          type: 'Like',
+          object: this.messageid,
+          context: [this.messageid]
+        })
+      }
+    }
+  },
+
+  template: '#like'
+}
+
+
+app.components = { Name, Like }
 Vue.createApp(app)
    .use(GraffitiPlugin(Vue))
    .mount('#app')

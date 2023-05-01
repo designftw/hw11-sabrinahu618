@@ -81,13 +81,13 @@
       <!-- A form for sending messages -->
         <form @submit.prevent="sendMessage">
           <input class="typemessage" v-model="messageText" placeholder="Type a message..." />
-          <input class="sendbutton" type="submit" value="Send" />
+          <input class="sendbutton" type="submit" value="Send" /> &nbsp;
           <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg"/>
         </form>
 
 
       <!-- List all the messages -->
-      <form v-for="message of messages" :key="message.id">
+      <div v-for="message of messages" :key="message.id">
 
         <!-- Display and edit form if we're editing a message -->
         <form v-if="editID==message.id" @submit.prevent="saveEditMessage(message)">
@@ -96,7 +96,7 @@
         </form>
 
         <!-- Otherwise, display a bunch of properties from the message -->
-        <form v-else>
+        <div v-else>
           <div class="message">
             <template v-if="message.actor === $gf.me"><div class="right"></div></template>
             <template v-else><div class="left"></div></template>
@@ -146,6 +146,10 @@
               </template>
             </div>
 
+            <div>
+                <like :messageid="message.id"></like>
+            </div>
+
     </template>
   </div>
   </div>
@@ -170,6 +174,13 @@
       <input type="submit" value="Save Name" />
     </form>
   </template>
+
+  <template id="like">
+    <button @click="toggleLike">
+      {{ myLikes.length? 'Unlike' : 'Like' }} {{ numLikes }}
+    </button>
+  </template>
+
 </body>
 
 </html>
