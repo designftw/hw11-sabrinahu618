@@ -9,10 +9,16 @@
     margin-top: 1em;
     padding: 1em;
     border-radius: 16px;
-    width: 30em;
+    width: 38em;
     /* margin-left: auto;
     margin-right: auto; */
     border: 1px solid #ccc;
+    transition: 300ms;
+    transform: ease-in-out;
+}
+
+.message:hover {
+    transform: scale(1.03);
 }
 
 #buttonchat {
@@ -23,6 +29,7 @@
     margin-top: 0.5em;
     padding: 0.5em;
     border-radius: 8px;
+    transition: 400ms;
 }
 
 #buttonchat:hover {
@@ -39,6 +46,27 @@ div.message:has(.right) {
     margin-left:auto;
 }
 
+.usernameInput {
+    width: 15em;
+    height: 2em;
+    padding-left: 0.5em;
+    border-radius: 8px 0px 0px 8px;
+    border: 1px solid #afafaf;
+}
+
+.setUsername {
+    width: 8em;
+    height: 2.3em;
+    border-radius: 0px 8px 8px 0px;
+    background-color: #f1e7fe;
+    border: 1px solid #afafaf;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+.setUsername:hover {
+    background-color: #e3d1f7;
+}
 
 .typemessage {
     width: 25em;
@@ -55,14 +83,19 @@ div.message:has(.right) {
     background-color: #f1e7fe;
     border: 1px solid #afafaf;
     cursor: pointer;
+    transition: 400ms;
+}
+
+.sendbutton:hover {
+    background-color: #e3d1f7;
 }
 
 .middle {
-    padding-top: 1em;
+    padding-top: 0.5em;
 }
 
 img {
-    width: 30em;
+    width: 38em;
     display: flex;
     margin-left: auto;
     margin-right: auto;
@@ -71,6 +104,14 @@ img {
 
 .name {
     font-weight: bold;
+}
+.identifier {
+    transition: 400ms;
+    transform: scale(1);
+}
+
+.identifier:hover {
+    transform: scale(1.03);
 }
 
 .username {
@@ -94,8 +135,22 @@ img {
     margin-right: 5em;
 }
 
+@keyframes pos {
+    from { --pos: 10%; }
+    to { --pos: 90%; }
+}
+
+@property --pos {
+	syntax: "<length-percentage>";
+	initial-value: 0;
+	inherits: false
+}
+
 .info {
-    background-color: #f7f7f7;
+    background: linear-gradient(to right,
+    #f1e7fe, white var(--pos, 50%), #f1e7fe);
+	animation: 3s pos infinite alternate;
+    /* background-color: #f7f7f7; */
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 2em;
@@ -116,3 +171,65 @@ img {
 .read {
     color: rgb(71, 71, 71);
 }
+
+.likebutton {
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    border-radius: 8px;
+    transition: 400ms;
+}
+
+@keyframes jump {
+	to { transform: translateY(-.4em); }
+}
+
+.likebutton:hover {
+    background-color: #ccc;
+    animation: jump 250ms 2 alternate;
+}
+
+.infoButton {
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    border-radius: 8px;
+    transition: 400ms;
+}
+
+.infoButton:hover {
+    background-color: #ccc;
+}
+
+.panda {
+    width: 8em;
+    height: 8em;
+    float: right;
+}
+
+.panda:hover {
+    animation: jump 250ms 6 alternate;
+}
+
+
+.typed {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: .1em solid transparent;
+    width: 0;
+    animation: typing 1.5s steps(30, end) forwards, blinking 2.3s;
+  }
+    
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 24% }
+  }
+
+  @keyframes blinking {
+    0% {border-right-color: transparent}
+    50% {border-right-color: black}
+    100% {border-right-color: transparent}
+  }

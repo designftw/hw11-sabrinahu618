@@ -225,19 +225,6 @@ const app = {
       // And clear the edit mark
       this.editID = ''
     },
-
-
-    // async requestUsernameChange() {
-    //   // alert('this.requestUsername: ' + this.requestUsername)
-    //   alert("this:" + (typeof this));
-    //   await this.resolver.requestUsername(this.requestUsername);
-
-    //   await resolver.actorToUsername(gf.me);
-    // }
-    // async requestUsername() {
-    //   alert('this.requestUsername: ' + this.requestUsername)
-    //   await this.resolver.requestUsername(this.requestUsername);
-    // }
   }
 }
 
@@ -414,7 +401,61 @@ const Read = {
   template: '#read'
 }
 
-app.components = { Name, Like, Read }
+const Reply = {
+  props: ["replyid"],
+  setup(props) {
+    const $gf = Vue.inject('graffiti')
+    const replyid = Vue.toRef(props, 'replyid')
+    const { objects: repliesRaw } = $gf.useObjects([replyid])
+    return { repliesRaw }
+  },
+
+  async sendMessage() {
+    const message = {
+      type: 'Note',
+      content: this.messageText,
+      inReplyTo: this.replyid
+    }
+
+    if(this.file) {
+      const magnet = await this.$gf.media.store(this.file)
+      message.attachment = {type: 'Image', magnet: magnet}
+    }
+
+    // Send!
+    this.$gf.post(message)
+    this.messageText = '';
+    this.file = null;
+  },
+
+  removeMessage(message) {
+    this.$gf.remove(message)
+  },
+
+  startEditMessage(message) {
+    // Mark which message we're editing
+    this.editID = message.id
+    // And copy over it's existing text
+    this.editText = message.content
+  },
+
+  saveEditMessage(message) {
+    // Save the text (which will automatically
+    // sync with the server)
+    message.content = this.editText
+    // And clear the edit mark
+    this.editID = ''
+  },
+
+  methods: {
+    replyButton() {
+      this.replying = true
+    },
+  }
+
+}
+
+app.components = { Name, Like, Read, Reply }
 Vue.createApp(app)
    .use(GraffitiPlugin(Vue))
    .mount('#app')

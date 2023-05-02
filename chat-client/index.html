@@ -8,29 +8,31 @@
 
 <body>
   <div id="app">
-    <h1 class="header">
-      My Cool Chat App
-    </h1>
-    <p class="header">
-      <button @click="$gf.toggleLogIn">
+    <div class="header">
+      <h1 class="typed">My Cool Chat App</h1>
+    </div>
+    <div class="header">
+      <button class="infoButton" @click="$gf.toggleLogIn">
         <!-- If we have a user ID, we're logged in so show "Log Out" -->
         <!-- Otherwise, show "Log In" -->
         {{ $gf.me? 'Log Out' : 'Log In' }}
       </button>
-    </p>
+    </div>
+    <br>
     <!-- If we're not logged in, hide everything except the login button -->
 
     <template v-if="$gf.me">
       <div class="info">
+        <img class="panda" src="img/panda on phone.png">
         <p>
           <b>My Username:</b> {{ myUsername }}
         </p>
         <p>
           <form @submit.prevent="resolver.requestUsername(preferredUsername).
               then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
-            <input v-model="preferredUsername" placeholder="Choose a Username" />
+            <input class="usernameInput" v-model="preferredUsername" placeholder="Choose a Username" />
             <!-- <input type="submit" value="Set Username"/> -->
-            <button type="submit">Set Username</button>
+            <button class="setUsername" type="submit">Set Username</button>
           </form>
           {{ usernameResult }}
           </p>
@@ -45,8 +47,6 @@
         <input v-model="requestUsername"/> 
         <button @click="requestUsernameChange">Change Username</button>
       </p> -->
-
-
         <div class="middle">
           <p>
             <b>Change chat format:</b>
@@ -80,11 +80,14 @@
 
         <!-- A form for sending messages -->
         <form @submit.prevent="sendMessage">
+          <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
           <input class="typemessage" v-model="messageText" placeholder="Type a message..." />
           <input class="sendbutton" type="submit" value="Send" /> &nbsp;
-          <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
         </form>
+
       </div>
+
+
 
 
       <!-- List all the messages -->
@@ -109,7 +112,7 @@
             <template v-if="!privateMessaging">
               <div>
                 <!-- <b>Name: </b> -->
-                <name class="name" :actor="message.actor"></name> <span class="username">@{{
+                <name class="name" :actor="message.actor"></name> <span>@{{
                   getUsername(message.actor) }}</span>
                 <!-- &nbsp; <b>Actor ID:</b> {{ message.actor }} -->
                 <div class="deletedit">
@@ -159,6 +162,7 @@
 
             <div class="read">
               <like :messageid="message.id"></like>
+              <reply :messageid="message.id"></reply>
               &nbsp;
               <read :readid="message.id"></read>
             </div>
@@ -176,7 +180,7 @@
       {{ profile? profile.name : 'Anonymous' }}
 
       <!-- Also if the name is "editable" add an edit button -->
-      <button v-if="editable" @click="editName">
+      <button class="infoButton" v-if="editable" @click="editName">
         Edit Name
       </button>
     </span>
@@ -189,13 +193,18 @@
   </template>
 
   <template id="like">
-    <button @click="toggleLike">
-      {{ myLikes.length? 'Unlike' : 'Like' }} {{ numLikes }}
+    <button class="likebutton" @click="toggleLike">
+      {{ myLikes.length? "Unlike" : "Like" }} {{ numLikes }}
     </button>
   </template>
 
   <template id="read"> Read: {{ ...new Set(usernames) }}
   </template>
+
+  <template id="reply">
+    <button @click="replyButton">
+      Reply
+    </button>
 
 </body>
 
