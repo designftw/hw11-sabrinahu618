@@ -8,82 +8,83 @@
 
 <body>
   <div id="app">
-    <h1>
+    <h1 class="header">
       My Cool Chat App
     </h1>
-
-    <p>
+    <p class="header">
       <button @click="$gf.toggleLogIn">
         <!-- If we have a user ID, we're logged in so show "Log Out" -->
         <!-- Otherwise, show "Log In" -->
         {{ $gf.me? 'Log Out' : 'Log In' }}
       </button>
     </p>
-
     <!-- If we're not logged in, hide everything except the login button -->
+
     <template v-if="$gf.me">
-      <p>
-      <form @submit.prevent="resolver.requestUsername(preferredUsername).
-          then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
-        <input v-model="preferredUsername" placeholder="Choose a Username" />
-        <!-- <input type="submit" value="Set Username"/> -->
-        <button type="submit">Set Username</button>
-      </form>
-      {{ usernameResult }}
-      </p>
-      <p>
-        My Username: {{ myUsername }}
-      </p>
-
-
-      <p>
-        <!-- We display names in multiple places, so we made a -->
-        <!-- reusable <name></name> component. -->
-        <!-- See below for the template. -->
-        My Name: <name :actor="$gf.me" :editable="true"></name>
-      </p>
-      <!-- <p>
+      <div class="info">
+        <p>
+          <b>My Username:</b> {{ myUsername }}
+        </p>
+        <p>
+          <form @submit.prevent="resolver.requestUsername(preferredUsername).
+              then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
+            <input v-model="preferredUsername" placeholder="Choose a Username" />
+            <!-- <input type="submit" value="Set Username"/> -->
+            <button type="submit">Set Username</button>
+          </form>
+          {{ usernameResult }}
+          </p>
+        <p>
+          <!-- We display names in multiple places, so we made a -->
+          <!-- reusable <name></name> component. -->
+          <!-- See below for the template. -->
+          <b>My Name:</b> <name :actor="$gf.me" :editable="true"></name>
+        </p>
+        <!-- <p>
         Enter a Username: <span> {{ requestUsername }} </span> 
         <input v-model="requestUsername"/> 
         <button @click="requestUsernameChange">Change Username</button>
       </p> -->
 
-      <div class="middle">
-        <p>
-          Change chat format:
-          <input type="radio" id="channel" :value="false" v-model="privateMessaging" />
-          <label for="channel">Channel-based public chat</label>
-          <input type="radio" id="pm" :value="true" v-model="privateMessaging" />
-          <label for="pm">Private Messaging</label>
-        </p>
-      </div>
 
-      <p v-if="!privateMessaging">
-        <!-- <label for="channel">
+        <div class="middle">
+          <p>
+            <b>Change chat format:</b>
+            <input type="radio" id="channel" :value="false" v-model="privateMessaging" />
+            <label for="channel">Channel-based public chat</label>
+            <input type="radio" id="pm" :value="true" v-model="privateMessaging" />
+            <label for="pm">Private Messaging</label>
+          </p>
+        </div>
+
+        <p v-if="!privateMessaging">
+          <!-- <label for="channel">
           Change the channel you're chatting in:
         </label>
         <input id="channel" v-model="channel" /> -->
-      </p>
-      <p v-else>
-        <label for="recipient">
-          Search Username:
-        </label>
-        <input id="recipient" v-model="recipient" />
-        <button @click="searchRecipient">Search</button>
-        <span id="progress"></span>
-        <br>
-        <label for="actorID">
-          Actor ID:
-          <input id="actorID" v-model="actorID" />
-        </label>
-      </p>
+        </p>
+        <p v-else>
+          <label for="recipient">
+            <b>Search Username: </b>
+          </label>
+          <input id="recipient" v-model="recipient" />
+          <button @click="searchRecipient">Search</button>
+          <span id="progress"></span>
+          <br>
+          <label for="actorID">
+            <b>Actor ID: </b>
+            <input id="actorID" v-model="actorID" />
+          </label>
+        </p>
 
-      <!-- A form for sending messages -->
+
+        <!-- A form for sending messages -->
         <form @submit.prevent="sendMessage">
           <input class="typemessage" v-model="messageText" placeholder="Type a message..." />
           <input class="sendbutton" type="submit" value="Send" /> &nbsp;
-          <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg"/>
+          <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
         </form>
+      </div>
 
 
       <!-- List all the messages -->
@@ -98,57 +99,68 @@
         <!-- Otherwise, display a bunch of properties from the message -->
         <div v-else>
           <div class="message">
-            <template v-if="message.actor === $gf.me"><div class="right"></div></template>
-            <template v-else><div class="left"></div></template>
-            
+            <template v-if="message.actor === $gf.me">
+              <div class="right"></div>
+            </template>
+            <template v-else>
+              <div class="left"></div>
+            </template>
+
             <template v-if="!privateMessaging">
-              <div> <b>Name: </b>
-                <name :actor="message.actor"></name> &nbsp; <b>Username:</b> <span class="username">{{
+              <div>
+                <!-- <b>Name: </b> -->
+                <name class="name" :actor="message.actor"></name> <span class="username">@{{
                   getUsername(message.actor) }}</span>
-                &nbsp; <b>Actor ID:</b> {{ message.actor }}
+                <!-- &nbsp; <b>Actor ID:</b> {{ message.actor }} -->
+                <div class="deletedit">
+                  <template v-if="message.actor==$gf.me">
+                    <button id="buttonchat" @click="removeMessage(message)">
+                      Delete
+                    </button>
+
+                    <button id="buttonchat" @click="startEditMessage(message)">
+                      Edit
+                    </button>
+                  </template>
+                </div>
+                <div class="time">{{ message.published }}</div>
+
               </div>
+
             </template>
 
             <template v-if="privateMessaging">
-              <div><b>Name:</b>
-                <name :actor="message.actor"></name>
+              <div>
+                <name class="name" :actor="message.actor"></name>
                 <!-- &nbsp; <b>To Actor ID:</b> {{ message.bto[0] }} -->
+                <span class="username">@{{
+                  getUsername(message.actor) }}</span>
               </div>
             </template>
             &nbsp;
-            <div><b>Message:</b> {{ message.content }}</div>
+            <div>{{ message.content }}</div>
             &nbsp;
             <div v-if="message.attachment">
               <div v-if="message.attachment.magnet in this.downloadedImages">
-                <img :src="downloadedImages[message.attachment.magnet]"/>
+                <img :src="downloadedImages[message.attachment.magnet]" />
               </div>
               <div v-else>
                 Loading
               </div>
               <!-- {{ message.attachment }} -->
             </div>
-            <div><b>Published at Time:</b> {{ message.published }}</div>
-            <div><b>Last Edited at Time:</b> {{ message.updated }}</div>
+            <!-- <div><b>Last Edited at Time:</b> {{ message.updated }}</div> -->
             <!-- This is a unique identifier that can be used to "link" to messages -->
             <!-- <div>ID: {{ message.id }}</div> -->
 
             <!-- Only add these controls if the message is ours -->
             <!-- You can't edit or delete other people's messages -->
-            <div>
-              <template v-if="message.actor==$gf.me">
-                <button id="buttonchat" @click="removeMessage(message)">
-                  Delete Message
-                </button>
 
-                <button id="buttonchat" @click="startEditMessage(message)">
-                  Edit Message
-                </button>
-              </template>
-            </div>
 
-            <div>
-                <like :messageid="message.id"></like>
-                <read :readid="message.id"></read>
+            <div class="read">
+              <like :messageid="message.id"></like>
+              &nbsp;
+              <read :readid="message.id"></read>
             </div>
 
     </template>

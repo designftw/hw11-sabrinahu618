@@ -4,12 +4,12 @@
 } */
 
 .message {
-    background-color: aliceblue;
+    background-color: #f7f7f7;
     margin-bottom: 1em;
     margin-top: 1em;
     padding: 1em;
     border-radius: 16px;
-    width: 40em;
+    width: 30em;
     /* margin-left: auto;
     margin-right: auto; */
     border: 1px solid #ccc;
@@ -30,18 +30,18 @@
 }
 
 div.message:has(.left) {
-    background-color: aliceblue;
+    background-color: #f7f7f7;
     margin-right:auto;
 }
 
 div.message:has(.right) {
-    background-color: rgb(98, 176, 244);
+    background-color: #f1e7fe;
     margin-left:auto;
 }
 
 
 .typemessage {
-    width: 30em;
+    width: 25em;
     height: 2em;
     padding-left: 0.5em;
     border-radius: 8px 0px 0px 8px;
@@ -52,7 +52,7 @@ div.message:has(.right) {
     width: 4.7em;
     height: 2.3em;
     border-radius: 0px 8px 8px 0px;
-    background-color: rgb(98, 176, 244);
+    background-color: #f1e7fe;
     border: 1px solid #afafaf;
     cursor: pointer;
 }
@@ -62,5 +62,57 @@ div.message:has(.right) {
 }
 
 img {
-    width: 20em;
+    width: 30em;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.username {
+    color: rgb(71, 71, 71);
+}
+
+.deletedit {
+    float: right;
+    margin-right: 1em;
+    cursor: pointer;
+}
+
+.time {
+    color: rgb(71, 71, 71);
+    font-size: 0.8em;
+    padding-top: 0.3em;
+}
+
+#app {
+    margin-left: 5em;
+    margin-right: 5em;
+}
+
+.info {
+    background-color: #f7f7f7;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: 1em;
+    border-radius: 8px;
+    border:rgb(71, 71, 71) 0.5px solid;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #5a228b;
+}
+
+.read {
+    color: rgb(71, 71, 71);
 }

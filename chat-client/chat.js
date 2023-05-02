@@ -42,7 +42,7 @@ const app = {
 
   setup() {
     // Initialize the name of the channel we're chatting in
-    const channel = Vue.ref('sharon')
+    const channel = Vue.ref('default')
 
     // And a flag for whether or not we're private-messaging
     const privateMessaging = Vue.ref(false)
@@ -163,7 +163,7 @@ const app = {
         return this.usernameLookup[actorID];
       }
 
-      this.usernameLookup[actorID] = "Not Found";
+      this.usernameLookup[actorID] = actorID;
       this.resolver.actorToUsername(actorID).then((result) => {
         if (result) {
           this.usernameLookup[actorID] = result;
@@ -173,7 +173,7 @@ const app = {
         }
         else {
           // this.usernameLookup[actorID] = "Not Found";
-          this.updateUsernameinpage(actorID, "Not Found");
+          this.updateUsernameinpage(actorID, actorID);
         }
       });
       return "Not Found";
