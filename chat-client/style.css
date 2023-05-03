@@ -52,6 +52,7 @@ div.message:has(.right) {
     padding-left: 0.5em;
     border-radius: 8px 0px 0px 8px;
     border: 1px solid #afafaf;
+    float: left;
 }
 
 .setUsername {
@@ -233,7 +234,7 @@ img {
     
   @keyframes typing {
     from { width: 0 }
-    to { width: 24% }
+    to { width: 8.2em }
   }
 
   @keyframes blinking {
@@ -322,4 +323,10 @@ summary {
     border-radius: 50%;
     float: left;
     margin-right: 0.5em;
+}
+
+.everythingrow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

@@ -541,7 +541,12 @@ const Pro = {
           }
           console.log("downloading image: " + profile.icon.magnet);
           this.downloadedpfpImages[profile.icon.magnet] = true;
-          const imageblob = await this.$gf.media.fetch(profile.icon.magnet);
+          let imageblob;
+          try {
+            imageblob = await this.$gf.media.fetch(profile.icon.magnet);
+          } catch (error) {
+            "Oh no! Something went wrong."
+          }
           this.downloadedpfpImages[profile.icon.magnet] = URL.createObjectURL(imageblob)
         
     }

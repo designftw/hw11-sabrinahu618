@@ -43,21 +43,23 @@
       <!-- <profile :actor="$gf.me" :editable="true"></profile> -->
 
 
-      <p>
-        <b>Name:</b> <name :actor="$gf.me" :editable="true"></name>
-      </p>
-      <p>
-        <b>Username:</b> {{ myUsername }}
-      </p>
-      <p>
-        <form @submit.prevent="resolver.requestUsername(preferredUsername).
-            then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
-          <input class="usernameInput" v-model="preferredUsername" placeholder="Choose a Username" />
-          <!-- <input type="submit" value="Set Username"/> -->
-          <button class="setUsername" type="submit">Set Username</button>
-        </form>
-        {{ usernameResult }}
+      <div class="everythingrow">
+        <p>
+          <b>Name:</b> <name :actor="$gf.me" :editable="true"></name>
         </p>
+        <p>
+          &nbsp; <b>Username:</b> {{ myUsername }} &nbsp;
+        </p>
+        <p>
+          <form @submit.prevent="resolver.requestUsername(preferredUsername).
+              then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
+            <input class="usernameInput" v-model="preferredUsername" placeholder="Choose a Username" />
+            <!-- <input type="submit" value="Set Username"/> -->
+            <button class="setUsername" type="submit">Set Username</button>
+          </form>
+          {{ usernameResult }}
+          </p>
+      </div>
       
         <div class="middle">
           <p>
@@ -271,6 +273,7 @@
     </span>
     
     <form v-else @submit.prevent="savePicture">
+      <br>
       <input @change="onProfileAttachment" type="file" accept="image/png, image/jpeg" />
       <input type="submit" value="Save" :disabled="privateMessaging"/>
     </form>
