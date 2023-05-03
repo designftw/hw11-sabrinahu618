@@ -24,29 +24,40 @@
     <template v-if="$gf.me">
       <div class="info">
         <img class="panda" src="img/panda on phone.png">
-        <p>
-          <b>My Username:</b> {{ myUsername }}
+
+      <p>
+        <b>Profile Picture:</b>
+      </p>
+      <form>
+        <input @change="onProfileAttachment" type="file" accept="image/png, image/jpeg" />
+        <input type="submit" value="Save" />
+      </form>
+  
+      <!-- <div v-if="profile.attachment">
+        <div v-if="profile.attachment.magnet in this.downloadedImages"></div>
+        <div v-else>
+          Loading
+        </div>
+      </div> -->
+      <!-- <profile :actor="$gf.me" :editable="true"></profile> -->
+
+
+      <p>
+        <b>Name:</b> <name :actor="$gf.me" :editable="true"></name>
+      </p>
+      <p>
+        <b>Username:</b> {{ myUsername }}
+      </p>
+      <p>
+        <form @submit.prevent="resolver.requestUsername(preferredUsername).
+            then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
+          <input class="usernameInput" v-model="preferredUsername" placeholder="Choose a Username" />
+          <!-- <input type="submit" value="Set Username"/> -->
+          <button class="setUsername" type="submit">Set Username</button>
+        </form>
+        {{ usernameResult }}
         </p>
-        <p>
-          <form @submit.prevent="resolver.requestUsername(preferredUsername).
-              then(r=>{usernameResult=r; myUsername=preferredUsername}).catch(e=>usernameResult=e.toString());">
-            <input class="usernameInput" v-model="preferredUsername" placeholder="Choose a Username" />
-            <!-- <input type="submit" value="Set Username"/> -->
-            <button class="setUsername" type="submit">Set Username</button>
-          </form>
-          {{ usernameResult }}
-          </p>
-        <p>
-          <!-- We display names in multiple places, so we made a -->
-          <!-- reusable <name></name> component. -->
-          <!-- See below for the template. -->
-          <b>My Name:</b> <name :actor="$gf.me" :editable="true"></name>
-        </p>
-        <!-- <p>
-        Enter a Username: <span> {{ requestUsername }} </span> 
-        <input v-model="requestUsername"/> 
-        <button @click="requestUsernameChange">Change Username</button>
-      </p> -->
+      
         <div class="middle">
           <p>
             <b>Change chat format:</b>
@@ -162,9 +173,10 @@
 
             <div class="read">
               <like :messageid="message.id"></like>
-              <reply :messageid="message.id"></reply>
               &nbsp;
               <read :readid="message.id"></read>
+              <br><br>
+              <reply :messageid="message.id"></reply>
             </div>
 
     </template>
@@ -193,18 +205,67 @@
   </template>
 
   <template id="like">
-    <button class="likebutton" @click="toggleLike">
-      {{ myLikes.length? "Unlike" : "Like" }} {{ numLikes }}
-    </button>
+    <div class="float-child">
+      <button class="likebutton" @click="toggleLike">
+        {{ myLikes.length? "Unlike" : "Like" }} {{ numLikes }}
+      </button>
+    </div>
   </template>
 
-  <template id="read"> Read: {{ ...new Set(usernames) }}
+  <template id="read"> 
+    <div class="hoverread">
+    Read {{ read.length }}
+    <div class="usernamelist">
+     {{ [...new Set(usernames)] }}
+    </div>
+  </div>
   </template>
+
 
   <template id="reply">
-    <button @click="replyButton">
-      Reply
-    </button>
+    <form @submit.prevent="sendMessage">
+      <input class="typereply" v-model="messageText" placeholder="Post a reply...">
+      <input class="sendbutton" type="submit" value="Send" />
+    </form>
+    <br>
+    <details>
+      <summary>Replies: {{ replies.length }}</summary>
+    <div v-for="reply of replies" :key="reply.inReplyTo">
+      <template v-if="!privateMessaging">
+        <div class="comments">
+          <!-- <b>Name: </b> -->
+          <name class="name" :actor="reply.actor"></name> 
+          <span>@{{ getUsername(reply.actor) }}</span> {{ reply.content }}
+          <!-- &nbsp; <b>Actor ID:</b> {{ message.actor }} -->
+          <div class="deleteditreply">
+            <template v-if="reply.actor==$gf.me">
+              <button id="buttonreply" @click="removeMessage(reply)">
+                Delete
+              </button>
+              &nbsp; 
+            </template>
+          </div>
+        </div>
+
+      </template>
+    </div>
+  </details>
+  </template>
+
+  
+  <!-- <template id="profile">
+    <span v-if="!editing">
+
+      <button class="infoButton" v-if="editable" @click="editName">
+        Edit Profile Picture
+      </button>
+    </span>
+
+    <form v-else @submit.prevent="savePicture">
+      <input v-model="editPicture" />
+      <input type="submit" value="Save Profile Picture" />
+    </form>
+  </template> -->
 
 </body>
 

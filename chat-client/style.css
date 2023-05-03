@@ -76,6 +76,14 @@ div.message:has(.right) {
     border: 1px solid #afafaf;
 }
 
+.typereply {
+    width: 40em;
+    height: 2em;
+    padding-left: 0.5em;
+    border-radius: 8px 0px 0px 8px;
+    border: 1px solid #afafaf;
+}
+
 .sendbutton{
     width: 4.7em;
     height: 2.3em;
@@ -233,3 +241,76 @@ img {
     50% {border-right-color: black}
     100% {border-right-color: transparent}
   }
+
+  .deleteditreply {
+    padding-top: 0.5em;
+  }
+
+  .comments {
+    background-color: white;
+    padding: 0.5em;
+    border-radius: 8px;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+  }
+
+  .usernamelist {
+    display: none;
+    position: absolute;
+	background: white;
+	border: 1px solid hsl(220 10% 90%);
+	padding: .8em 1em;
+	border-radius: .2em;
+	margin-top: .3em;
+	filter: drop-shadow(0 0 .5em hsl(220 10% 50% / .3));
+  }
+
+  /* .usernamelist::before {
+    content: '';
+	position: absolute;
+	left: 1.5em;
+	bottom: 100%;
+	aspect-ratio: 2 / 1;
+	height: .8em;
+	clip-path: polygon(0 100%, 50% 0, 100% 100%);
+	background: inherit;
+  } */
+
+  /* .hoverread:not(:hover) + .usernamelist {
+	display: none;
+} */
+.hoverread {
+    color: black;
+    font-size: 11pt;
+    float: left;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 0.4em;
+    border-radius: 8px;
+    margin-left: 0.5em;
+}
+.hoverread:hover .usernamelist {
+    display: block;
+
+}
+
+.float-child {
+    float: left;
+}
+
+summary {
+    cursor: pointer;
+}
+
+#buttonreply {
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    border-radius: 8px;
+    transition: 400ms;
+}
+
+#buttonreply:hover {
+    background-color: #ccc;
+}
