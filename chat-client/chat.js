@@ -42,7 +42,7 @@ const app = {
 
   setup() {
     // Initialize the name of the channel we're chatting in
-    const channel = Vue.ref('default')
+    const channel = Vue.ref('sharon')
 
     // And a flag for whether or not we're private-messaging
     const privateMessaging = Vue.ref(false)
@@ -340,10 +340,6 @@ const Like = {
   template: '#like'
 }
 
-
-
-
-
 const Read = {
   props: ["readid"],
 
@@ -495,186 +491,96 @@ const Reply = {
       template: '#reply'
     }
 
-  // const Profile = {
-  //     props: ['actor', 'editable'],
 
-  //     setup(props) {
-  //       // Get a collection of all objects associated with the actor
-  //       const { actor } = Vue.toRefs(props)
-  //       const $gf = Vue.inject('graffiti')
-  //       return $gf.useObjects([actor])
-  //     },
+const Pro = {
+  props: ['actor', 'editable'],
 
-  //     computed: {
-  //       profile() {
-  //         console.log("computed profile")
-  //         let profile = this.objects
-  //         .filter(m=>
-  //           // Does the message have a type property?
-  //           m.type &&
-  //           // Is the value of that property 'Profile'?
-  //           m.type=='Profile' &&
-  //           // Does the message have a name property?
-  //           m.name &&
-  //           // Is that property a string?
-  //           typeof m.name=='string')
-  //         // Choose the most recent one or null if none exists
-  //         .reduce((prev, curr)=> !prev || curr.published > prev.published? curr : prev, null)
-  //       return profile[0];
-  //     }
-  //   },
-  //     data() {
-  //       console.log("data")
-  //       return {
-  //         editing: false,
-  //         editText: ''
-  //       }
-  //     },
-
-  //     watch: {
-  //       async profile(profile) {
-  //         console.log("profile.profile")
-  //         const profileImage = 
-  //         profile.filter(p=>
-  //           // Does the message have a type property?
-  //           p.attachment         &&
-  //           typeof p.attachment=='object' &&
-  //           p.attachment.magnet     &&
-  //           typeof p.attachment.magnet=='string' &&
-  //           p.attachment.type    &&
-  //           p.attachment.type=='Image') 
-            
-  //           for (const profile of profileImage) {
-  //             if (profile.attachment.magnet in this.downloadedImages) {
-  //               continue;
-  //             }
-  //             console.log("downloading image: " + profile.attachment.magnet);
-  //             this.downloadedImages[profile.attachment.magnet] = true;
-  //             const imageblob = await this.$gf.media.fetch(profile.attachment.magnet);
-  //             this.downloadedImages[profile.attachment.magnet] = URL.createObjectURL(imageblob)
-  //           }
-  //       }
-  //     },
-
-
-  //   }
-
-
-
-    const Profile = {
-      props: ['actor', 'editable'],
-    
-      setup(props) {
-        // Get a collection of all objects associated with the actor
-        const { actor } = Vue.toRefs(props)
-        const $gf = Vue.inject('graffiti')
-        return $gf.useObjects([actor])
-      },
-      
-      computed: {
-        profile() {
-          let profile = this.objects
-              
-            // Filter the raw objects for profile data
-            // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-profile
-            .filter(m=>
-              // Does the message have a type property?
-              m.type &&
-              // Is the value of that property 'Profile'?
-              m.type=='Profile' &&
-              // Does the message have a name property?
-              m.name &&
-              // Is that property a string?
-              typeof m.name=='string')
-            // Choose the most recent one or null if none exists
-            .reduce((prev, curr)=> !prev || curr.published > prev.published? curr : prev, null)
-          return profile[0];
-        }
-      },
-    
-      data() {
-        return {
-          editing: false,
-          editText: ''
-        }
-      },
-
-      watch: {
-        async profile(profile) {
-          const profileImage = 
-          profile.filter(p=>
-            // Does the message have a type property?
-            p.attachment         &&
-            typeof p.attachment=='object' &&
-            p.attachment.magnet     &&
-            typeof p.attachment.magnet=='string' &&
-            p.attachment.type    &&
-            p.attachment.type=='Image') 
-            
-            for (const profile of profileImage) {
-              if (profile.attachment.magnet in this.downloadedImages) {
-                continue;
-              }
-              console.log("downloading image: " + profile.attachment.magnet);
-              this.downloadedImages[profile.attachment.magnet] = true;
-              const imageblob = await this.$gf.media.fetch(profile.attachment.magnet);
-              this.downloadedImages[profile.attachment.magnet] = URL.createObjectURL(imageblob)
-            }
-        }
-      },
-    
-      methods: {
-        async onProfileAttachment(event) {
-          const file = event.target.files[0]
-          console.log(file.name);
-          this.file = file;
-    
-          if(this.file) {
-            const magnet = await this.$gf.media.store(this.file)
-            // console.log("magnet" + magnet);
-            if (magnet) {
-              this.$gf.post({
-                type: 'Profile',
-                icon: {
-                  type: 'Image',
-                  magnet: magnet,
-                }
-              })
-            } else {
-              alert("Error uploading image");
-            }
-          }
-        },
-
-        editPicture() {
-          this.editing = true
-          // If we already have a profile,
-          // initialize the edit text to our existing name
-          this.editText = this.profile? this.profile.name : this.editText
-        },
-    
-        savePicture() {
-          if (this.profile) {
-            // If we already have a profile, just change the name
-            // (this will sync automatically)
-            this.profile.name = this.editText
-          } else {
-            // Otherwise create a profile
-            this.$gf.post({
-              type: 'Profile',
-              name: this.editText
-            })
-          }
-    
-          // Exit the editing state
-          this.editing = false
-        }
-      },
-    
-      template: '#profile'
+  setup(props) {
+    // Get a collection of all objects associated with the actor
+    const { actor } = Vue.toRefs(props)
+    const $gf = Vue.inject('graffiti')
+    return $gf.useObjects([actor])
+  },
+  
+  computed: {
+    profile() {
+      return this.objects
+        .filter(p=>
+          p.type &&
+          p.type=='Profile' &&
+          p.icon &&
+          p.icon.type &&
+          p.icon.type=='Image' &&
+          p.icon.magnet &&
+          typeof p.icon.magnet=='string')
+        .reduce((prev, curr)=> !prev || curr.published > prev.published? curr : prev, null)
     }
+  },
+    
+  data() {
+    return {
+      editing: false,
+      file: null,
+      downloadedpfpImages: {},
+    }
+  },
 
-app.components = { Name, Like, Read, Reply, Profile }
+  watch: {
+    async profile(profile) {
+      // const profileImage = 
+      // profile.filter(p=>
+      //   p.attachment         &&
+      //   typeof p.attachment=='object' &&
+      //   p.attachment.magnet     &&
+      //   typeof p.attachment.magnet=='string' &&
+      //   p.attachment.type    &&
+      //   p.attachment.type=='Image') 
+        
+          if (profile.icon.magnet in this.downloadedpfpImages) {
+            return
+          }
+          console.log("downloading image: " + profile.icon.magnet);
+          this.downloadedpfpImages[profile.icon.magnet] = true;
+          const imageblob = await this.$gf.media.fetch(profile.icon.magnet);
+          this.downloadedpfpImages[profile.icon.magnet] = URL.createObjectURL(imageblob)
+        
+    }
+  },
+
+  methods: {
+    async onProfileAttachment(event) {
+      const file = event.target.files[0]
+      console.log(file.name);
+      this.file = file;
+    },
+
+    editPicture() {
+      this.editing = true
+    },
+
+    async savePicture() {
+      console.log("AAAAAAAAAAAAAAAAAAAAAA")
+      const magnet = await this.$gf.media.store(this.file)
+      console.log("magnet" + magnet);
+      if (this.profile) {
+        this.profile.icon = {type: 'Image', magnet: magnet}
+        this.file = null;
+      }
+      else {
+        this.$gf.post({
+          type: 'Profile',
+          icon: {type: 'Image', magnet: magnet}
+        })
+        this.file = null;
+      }
+      this.editing = false
+    }
+  },
+
+  template: '#pro'
+}
+
+app.components = { Name, Like, Read, Reply, Pro }
 Vue.createApp(app)
    .use(GraffitiPlugin(Vue))
    .mount('#app')

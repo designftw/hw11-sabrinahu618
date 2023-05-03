@@ -25,13 +25,14 @@
       <div class="info">
         <img class="panda" src="img/panda on phone.png">
 
-      <p>
-        <b>Profile Picture:</b>
-      </p>
-      <form>
-        <input @change="onProfileAttachment" type="file" accept="image/png, image/jpeg" />
-        <input type="submit" value="Save" />
-      </form>
+      <div>
+        <b>Profile Picture:</b> 
+          <pro :actor="$gf.me" :editable="true"></pro>
+      </div>
+
+      <br><br>
+
+      
   
       <!-- <div v-if="profile.attachment">
         <div v-if="profile.attachment.magnet in this.downloadedImages"></div>
@@ -99,8 +100,6 @@
       </div>
 
 
-
-
       <!-- List all the messages -->
       <div v-for="message of messages" :key="message.id">
 
@@ -123,11 +122,13 @@
             <template v-if="!privateMessaging">
               <div>
                 <!-- <b>Name: </b> -->
+                <pro :actor="message.actor"></pro>
                 <name class="name" :actor="message.actor"></name> <span>@{{
                   getUsername(message.actor) }}</span>
                 <!-- &nbsp; <b>Actor ID:</b> {{ message.actor }} -->
                 <div class="deletedit">
                   <template v-if="message.actor==$gf.me">
+
                     <button id="buttonchat" @click="removeMessage(message)">
                       Delete
                     </button>
@@ -145,6 +146,7 @@
 
             <template v-if="privateMessaging">
               <div>
+                <pro :actor="message.actor"></pro>
                 <name class="name" :actor="message.actor"></name>
                 <!-- &nbsp; <b>To Actor ID:</b> {{ message.bto[0] }} -->
                 <span class="username">@{{
@@ -161,7 +163,6 @@
               <div v-else>
                 Loading
               </div>
-              <!-- {{ message.attachment }} -->
             </div>
             <!-- <div><b>Last Edited at Time:</b> {{ message.updated }}</div> -->
             <!-- This is a unique identifier that can be used to "link" to messages -->
@@ -253,19 +254,27 @@
   </template>
 
   
-  <!-- <template id="profile">
+  <template id="pro">
+    <div v-if="profile">
+      <div v-if="profile.icon">
+        <template v-if="profile.icon.magnet in this.downloadedpfpImages">
+          <img class="profilepicture" :src="downloadedpfpImages[profile.icon.magnet]" />
+        </template>
+      </div>
+      <div v-else>
+        Loading
+      </div>
+    </div>
     <span v-if="!editing">
-
-      <button class="infoButton" v-if="editable" @click="editName">
-        Edit Profile Picture
-      </button>
+      <br>
+      <button class="infoButton" v-if="editable" @click="editPicture">Edit Profile Picture</button>
     </span>
-
+    
     <form v-else @submit.prevent="savePicture">
-      <input v-model="editPicture" />
-      <input type="submit" value="Save Profile Picture" />
+      <input @change="onProfileAttachment" type="file" accept="image/png, image/jpeg" />
+      <input type="submit" value="Save" :disabled="privateMessaging"/>
     </form>
-  </template> -->
+  </template>
 
 </body>
 

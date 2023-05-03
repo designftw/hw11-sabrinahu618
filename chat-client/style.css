@@ -314,3 +314,12 @@ summary {
 #buttonreply:hover {
     background-color: #ccc;
 }
+
+.profilepicture {
+    width: 4em;
+    height: 4em;
+    object-fit: cover;
+    border-radius: 50%;
+    float: left;
+    margin-right: 0.5em;
+}
