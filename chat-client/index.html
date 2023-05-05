@@ -94,9 +94,13 @@
 
         <!-- A form for sending messages -->
         <form @submit.prevent="sendMessage">
-          <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
-          <input class="typemessage" v-model="messageText" placeholder="Type a message..." />
-          <input class="sendbutton" type="submit" value="Send" /> &nbsp;
+            <!-- <h3> {props.title} </h3> -->
+          <div class="everythingrow">
+            <a href="https://www.google.com/maps/" target="_blank"> <img class='purple' src="img/purple.png"/> </a> &nbsp;
+            <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
+            <input class="typemessage" v-model="messageText" placeholder="Type a message..." />
+            <input class="sendbutton" type="submit" value="Send" />
+          </div> &nbsp;
         </form>
 
       </div>
@@ -156,11 +160,14 @@
               </div>
             </template>
             &nbsp;
-            <div>{{ message.content }}</div>
+            <div>
+              {{ message.content }}
+              <a href="https://www.google.com/maps/${{message.content}}" target="_blank"> <img class='purple' src="img/purple.png"/> </a> &nbsp;
+            </div>
             &nbsp;
             <div v-if="message.attachment">
               <div v-if="message.attachment.magnet in this.downloadedImages">
-                <img :src="downloadedImages[message.attachment.magnet]" />
+                <img class="messageImage" :src="downloadedImages[message.attachment.magnet]" />
               </div>
               <div v-else>
                 Loading
