@@ -77,6 +77,16 @@ div.message:has(.right) {
     border: 1px solid #afafaf;
 }
 
+.locmessage {
+    width: 15em;
+    height: 2em;
+    padding-left: 0.5em;
+    border-radius: 8px;
+    border: 1px solid #afafaf;
+    margin-right: 1em;
+}
+
+
 .typereply {
     width: 40em;
     height: 2em;
@@ -234,7 +244,7 @@ div.message:has(.right) {
     
   @keyframes typing {
     from { width: 0 }
-    to { width: 8.2em }
+    to { width: 4.95em }
   }
 
   @keyframes blinking {
@@ -335,4 +345,17 @@ summary {
     width: 1em;
     /* padding-top: 0.8em; */
     padding-right: 0.5em;
+}
+
+input::file-selector-button {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.5em;
+    background-color: white;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+input::file-selector-button:hover {
+    background-color: #ccc;
 }

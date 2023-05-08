@@ -3,6 +3,9 @@ import { mixin } from "https://mavue.mavo.io/mavue.js";
 import GraffitiPlugin from 'https://graffiti.garden/graffiti-js/plugins/vue/plugin.js'
 import Resolver from './resolver.js'
 
+
+const locationmap = {'cupertino': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50774.468702065715!2d-122.04364444999999!3d37.30924995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb4571bd377ab%3A0x394d3fe1a3e178b4!2sCupertino%2C%20CA!5e0!3m2!1sen!2sus!4v1683579802741!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`, 'jonquils': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2948.5817483792484!2d-71.07920982468609!3d42.35143983564747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e37b1f2fd8191d%3A0xc7b8425546bf45e4!2sJonquils%20Cafe%20and%20Bakery!5e0!3m2!1sen!2sus!4v1683580933951!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`}
+
 const app = {
 
   watch: {
@@ -62,6 +65,7 @@ const app = {
     // Initialize some more reactive variables
     return {
       messageText: '',
+      messageLocation: '',
       editID: '',
       editText: '',
       recipient: '',
@@ -72,6 +76,7 @@ const app = {
       myUsername: '',
       usernameLookup: [],
       downloadedImages: {},
+      locationmap,
     }
   },
 
@@ -89,7 +94,8 @@ const app = {
           // Is the value of that property 'Note'?
           m.type=='Note' &&
           // Does the message have a content property?
-          m.content      &&
+          (m.content || m.location || m.attachment) &&
+        
           // Is that property a string?
           typeof m.content=='string') 
 
@@ -117,6 +123,20 @@ const app = {
         // Only show the 10 most recent ones
         .slice(0,10)
     },
+
+    locations() {
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
+      let locations = [];
+      for (const message of this.messages) {
+          if (message.location != null){
+            locations.push(message.location);
+          }
+        console.log(message.location)
+      }
+      return [...new Set(locations)];
+    },
+
+    
   },
 
   methods: {
@@ -184,6 +204,7 @@ const app = {
     async sendMessage() {
       const message = {
         type: 'Note',
+        location: this.messageLocation,
         content: this.messageText,
       }
 
@@ -206,6 +227,7 @@ const app = {
       // Send!
       this.$gf.post(message)
       this.messageText = '';
+      this.messageLocation = '';
       this.file = null;
     },
 
@@ -412,6 +434,7 @@ const Reply = {
   data () {
     return {
       messageText: '',
+      messageLocation: '',
       usernameLookup: {},
     }
   },
@@ -441,6 +464,7 @@ const Reply = {
         async sendMessage() {
           const message = {
             type: 'Note',
+            location: this.messageLocation,
             content: this.messageText,
             inReplyTo: this.messageid,
             context: [this.messageid]
@@ -454,6 +478,7 @@ const Reply = {
           // Send!
           this.$gf.post(message)
           this.messageText = '';
+          this.messageLocation = '';
           this.file = null;
         },
 
@@ -584,6 +609,8 @@ const Pro = {
 
   template: '#pro'
 }
+
+
 
 app.components = { Name, Like, Read, Reply, Pro }
 Vue.createApp(app)

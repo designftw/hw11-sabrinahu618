@@ -9,7 +9,7 @@
 <body>
   <div id="app">
     <div class="header">
-      <h1 class="typed">My Cool Chat App</h1>
+      <h1 class="typed">Chat To Go</h1>
     </div>
     <div class="header">
       <button class="infoButton" @click="$gf.toggleLogIn">
@@ -29,7 +29,6 @@
         <b>Profile Picture:</b> 
           <pro :actor="$gf.me" :editable="true"></pro>
       </div>
-
       <br><br>
 
       
@@ -63,7 +62,7 @@
       
         <div class="middle">
           <p>
-            <b>Change chat format:</b>
+            <b>Chat format:</b>
             <input type="radio" id="channel" :value="false" v-model="privateMessaging" />
             <label for="channel">Channel-based public chat</label>
             <input type="radio" id="pm" :value="true" v-model="privateMessaging" />
@@ -71,12 +70,12 @@
           </p>
         </div>
 
-        <p v-if="!privateMessaging">
-          <!-- <label for="channel">
-          Change the channel you're chatting in:
+        <!-- <p v-if="!privateMessaging">
+          <label for="channel">
+          <b>Channel: </b>
         </label>
-        <input id="channel" v-model="channel" /> -->
-        </p>
+        <input id="channel" v-model="channel" />
+        </p> -->
         <p v-else>
           <label for="recipient">
             <b>Search Username: </b>
@@ -97,13 +96,20 @@
             <!-- <h3> {props.title} </h3> -->
           <div class="everythingrow">
             <a href="https://www.google.com/maps/" target="_blank"> <img class='purple' src="img/purple.png"/> </a> &nbsp;
+            <input class="locmessage" v-model="messageLocation" placeholder="Type the location name..." />
             <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
             <input class="typemessage" v-model="messageText" placeholder="Type a message..." />
             <input class="sendbutton" type="submit" value="Send" />
           </div> &nbsp;
         </form>
 
+        <p>Locations Mentioned:</p>
+        <div v-for="location of locations">
+          {{ location }}
+        </div>  
+
       </div>
+        
 
 
       <!-- List all the messages -->
@@ -162,8 +168,16 @@
             &nbsp;
             <div>
               {{ message.content }}
-              <a href="https://www.google.com/maps/${{message.content}}" target="_blank"> <img class='purple' src="img/purple.png"/> </a> &nbsp;
+              <br>
+              <div v-if = "message.location">
+              {{ message.location }}
+              <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11792.11606226918!2d-71.10630604458012!3d42.3632209!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e371f91ba3519b%3A0xe1de5b2dc2ad0511!2sVESTER%20Cambridge!5e0!3m2!1sen!2sus!4v1683324436617!5m2!1sen!2sus" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+              <!-- <iframe src="demo3_iframe.htm" name="iframe_a" width="100%" title="Iframe Example"></iframe> -->
+              <a :href="'https://www.google.com/maps/search/' + message.location" target="_blank"> <img class='purple' src="img/purple.png"/> </a> &nbsp;
+              <div v-if = "locationmap[message.location]" v-html="locationmap[message.location]">
+              </div>
             </div>
+          </div>
             &nbsp;
             <div v-if="message.attachment">
               <div v-if="message.attachment.magnet in this.downloadedImages">
@@ -226,7 +240,10 @@
     <div class="hoverread">
     Read {{ read.length }}
     <div class="usernamelist">
-     {{ [...new Set(usernames)] }}
+      <template v-for="username of [...new Set(usernames)]">
+        <div class="username">{{ username }}</div>
+      </template>
+     <!-- {{ [...new Set(usernames)] }} -->
     </div>
   </div>
   </template>
