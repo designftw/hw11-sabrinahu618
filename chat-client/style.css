@@ -55,6 +55,14 @@ div.message:has(.right) {
     float: left;
 }
 
+#channelText {
+    width: 8em;
+    height: 2em;
+    padding-left: 0.5em;
+    border-radius: 8px;
+    border: 1px solid #afafaf;
+}
+
 .setUsername {
     width: 8em;
     height: 2.3em;
@@ -72,8 +80,8 @@ div.message:has(.right) {
 .typemessage {
     width: 25em;
     height: 2em;
-    padding-left: 0.5em;
-    border-radius: 8px 0px 0px 8px;
+    border-radius: 8px;
+    margin-right: 1em;
     border: 1px solid #afafaf;
 }
 
@@ -86,6 +94,21 @@ div.message:has(.right) {
     margin-right: 1em;
 }
 
+#recipient {
+    width: 10em;
+    height: 2em;
+    padding-left: 0.5em;
+    border-radius: 8px 0px 0px 8px;
+    border: 1px solid #afafaf;
+}
+#actorID {
+    width: 15em;
+    height: 2em;
+    padding-left: 0.5em;
+    border-radius: 8px;
+    border: 1px solid #afafaf;
+    margin-right: 1em;
+}
 
 .typereply {
     width: 40em;
@@ -98,7 +121,7 @@ div.message:has(.right) {
 .sendbutton{
     width: 4.7em;
     height: 2.3em;
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 8px;
     background-color: #f1e7fe;
     border: 1px solid #afafaf;
     cursor: pointer;
@@ -198,6 +221,19 @@ div.message:has(.right) {
     padding: 0.5em;
     border-radius: 8px;
     transition: 400ms;
+}
+
+.searchButton {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    border-radius: 0px 8px 8px 0px;
+    background-color: #f1e7fe;
+    transition: 400ms;
+}
+
+.searchButton:hover {
+    background-color: #ccc;
 }
 
 @keyframes jump {
@@ -333,6 +369,7 @@ summary {
     border-radius: 50%;
     float: left;
     margin-right: 0.5em;
+    border: 1px solid #ccc;
 }
 
 .everythingrow {
@@ -344,7 +381,9 @@ summary {
 .purple {
     width: 1em;
     /* padding-top: 0.8em; */
-    padding-right: 0.5em;
+    padding-right: 0.25em;
+    padding-bottom: 0.25em;
+    padding-top: 0.25em;
 }
 
 input::file-selector-button {
@@ -359,3 +398,12 @@ input::file-selector-button {
 input::file-selector-button:hover {
     background-color: #ccc;
 }
+
+
+.locationMarker *{
+    vertical-align: middle;
+}
+
+input[type='file'] {
+    max-width: 15em;
+  }

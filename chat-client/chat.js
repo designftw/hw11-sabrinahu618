@@ -4,7 +4,11 @@ import GraffitiPlugin from 'https://graffiti.garden/graffiti-js/plugins/vue/plug
 import Resolver from './resolver.js'
 
 
-const locationmap = {'cupertino': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50774.468702065715!2d-122.04364444999999!3d37.30924995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb4571bd377ab%3A0x394d3fe1a3e178b4!2sCupertino%2C%20CA!5e0!3m2!1sen!2sus!4v1683579802741!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`, 'jonquils': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2948.5817483792484!2d-71.07920982468609!3d42.35143983564747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e37b1f2fd8191d%3A0xc7b8425546bf45e4!2sJonquils%20Cafe%20and%20Bakery!5e0!3m2!1sen!2sus!4v1683580933951!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`}
+const locationmap = {'cupertino': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50774.468702065715!2d-122.04364444999999!3d37.30924995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb4571bd377ab%3A0x394d3fe1a3e178b4!2sCupertino%2C%20CA!5e0!3m2!1sen!2sus!4v1683579802741!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`, 
+'jonquils': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2948.5817483792484!2d-71.07920982468609!3d42.35143983564747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e37b1f2fd8191d%3A0xc7b8425546bf45e4!2sJonquils%20Cafe%20and%20Bakery!5e0!3m2!1sen!2sus!4v1683580933951!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`, 
+'stata': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47169.48286359829!2d-71.16266037832031!3d42.3618641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e370a95cb1e19b%3A0xa9dc1ab3c8bedd1e!2sRay%20and%20Maria%20Stata%20Center!5e0!3m2!1sen!2sus!4v1683665956606!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`,
+'mit': `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11792.703493632485!2d-71.1121844445801!3d42.36009099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e370aaf51a6a87%3A0xd0e08ea5b308203c!2sMassachusetts%20Institute%20of%20Technology!5e0!3m2!1sen!2sus!4v1683666072677!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
+}
 
 const app = {
 
@@ -128,7 +132,7 @@ const app = {
       console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
       let locations = [];
       for (const message of this.messages) {
-          if (message.location != null){
+          if (message.location != null && message.location != ""){
             locations.push(message.location);
           }
         console.log(message.location)
