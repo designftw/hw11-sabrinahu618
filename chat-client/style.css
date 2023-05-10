@@ -132,6 +132,20 @@ div.message:has(.right) {
     background-color: #e3d1f7;
 }
 
+.sendbuttonchat{
+    width: 4.7em;
+    height: 2.3em;
+    border-radius: 0px 8px 8px 0px;
+    background-color: #f1e7fe;
+    border: 1px solid #afafaf;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+.sendbuttonchat:hover {
+    background-color: #e3d1f7;
+}
+
 .middle {
     padding-top: 0.5em;
 }
