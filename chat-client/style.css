@@ -176,7 +176,7 @@ div.message:has(.right) {
 
 .deletedit {
     float: right;
-    margin-right: 1em;
+    /* margin-right: 1em; */
     cursor: pointer;
 }
 
@@ -421,3 +421,9 @@ input::file-selector-button:hover {
 input[type='file'] {
     max-width: 15em;
   }
+
+
+hr {
+    width: 54em;
+    float: left;
+}

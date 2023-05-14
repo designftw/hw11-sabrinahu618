@@ -4,6 +4,7 @@
 <head>
   <script type="module" src="./chat.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css" />
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5CZobkD0BBwVp-Mkq24ji149Sq-TQ084&libraries=places"></script>
 </head>
 
 <body>
@@ -21,15 +22,49 @@
     <br>
     <!-- If we're not logged in, hide everything except the login button -->
 
+    
+    <div>
+
+
     <template v-if="$gf.me">
       <div class="info">
         <img class="panda" src="img/panda on phone.png">
+        <div v-if="!editProfile">
+          <div>
+            <b>My Profile </b>
+            <button class="infoButton" @click="editingProf()" id="profile">
+              Edit
+            </button>
+          </div>
+        
+        <div>
+            <pro :actor="$gf.me" :editable="false"></pro>
+            <b><name :actor="$gf.me" :editable="false"></name></b>
+            <br>
+            <div v-if="myUsername">
+              @{{ myUsername }}
+            </div>
+            <div v-else>
+              No Username Yet
+            </div>
+        </div>
+        <br><hr><br>
+      </div>
 
+      
+
+
+    <div v-if="editProfile">
+      <div>
+        <b>Editing Profile </b>
+        <button class="infoButton" @click="stopEdit">Save</button>
+      </div>
+      <br>
       <div>
         <b>Profile Picture:</b> 
           <pro :actor="$gf.me" :editable="true"></pro>
       </div>
-      <br><br>
+      <br>
 
 
       <div class="everythingrow">
@@ -49,6 +84,8 @@
           {{ usernameResult }}
           </p>
       </div>
+      <hr><br>
+    </div>
       
         <div class="middle">
           <p>
@@ -78,14 +115,16 @@
             <input id="actorID" v-model="actorID" />
           </label>
         </p>
-
+        <hr><br><br>
 
         <!-- A form for sending messages -->
         <form @submit.prevent="sendMessage">
             <!-- <h3> {props.title} </h3> -->
           <div class="everythingrow">
             <a href="https://www.google.com/maps/" target="_blank"> <img class='purple' src="img/purple.png"/> </a> &nbsp;
-            <input class="locmessage" v-model="messageLocation" placeholder="Type the location name..." />
+            <input id='autocomplete' class="locmessage" v-model="messageLocation" placeholder="Type the location name..." />
+            
+
             <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
             <input class="typemessage" v-model="messageText" placeholder=" Type a message..." />
             <input class="sendbutton" type="submit" value="Send" />
@@ -98,6 +137,7 @@
             <a class='locationMarker' :href="'https://www.google.com/maps/search/' + location" target="_blank"> <img class='purple' src="img/purple.png"/>{{ location }}</a>
           </div>
         </details>
+        <br>
 
       </div>
         
@@ -135,10 +175,9 @@
                     <button id="buttonchat" @click="removeMessage(message)">
                       Delete
                     </button>
-
-                    <button id="buttonchat" @click="startEditMessage(message)">
+                    <!-- <button id="buttonchat" @click="startEditMessage(message)">
                       Edit
-                    </button>
+                    </button> -->
                   </template>
                 </div>
                 <div class="time">{{ message.published }}</div>
@@ -174,12 +213,13 @@
           <div>
               {{ message.content }}
             <div v-if="message.location">
-              
-              <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11792.11606226918!2d-71.10630604458012!3d42.3632209!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e371f91ba3519b%3A0xe1de5b2dc2ad0511!2sVESTER%20Cambridge!5e0!3m2!1sen!2sus!4v1683324436617!5m2!1sen!2sus" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
-              <!-- <iframe src="demo3_iframe.htm" name="iframe_a" width="100%" title="Iframe Example"></iframe> -->
                 <a class="locationMarker" :href="'https://www.google.com/maps/search/' + message.location" target="_blank"> <img class='purple' src="img/purple.png"/>{{ message.location }} </a> &nbsp;
-                <div v-if="locationmap[message.location]" v-html="locationmap[message.location]">
-                </div>
+                <!-- <div v-if="locationmap[message.location]" v-html="locationmap[message.location]">
+                </div>  -->
+                <br>
+                <iframe :src="'https://www.google.com/maps/embed/v1/place?key=AIzaSyB5CZobkD0BBwVp-Mkq24ji149Sq-TQ084&q=' + message.location" width="610" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                <!-- <iframe :src="'https://www.google.com/maps/embed/v1/place?key=' + apikey + '&q=' + message.location" width="610" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
             </div>
           </div>
             &nbsp;
@@ -308,5 +348,19 @@
   </template>
 
 </body>
+
+<script>
+  function initgooglemaps() {
+    var input = document.getElementById('autocomplete');
+    window.autocomplete = new google.maps.places.Autocomplete(input);
+    google.maps.event.addListener(window.autocomplete, "place_changed", () => {
+      console.log("place changed", window.app);
+      var place = window.autocomplete.getPlace();
+      var input = document.getElementById('autocomplete');
+      window.app.messageLocation = input.value;
+    });
+  }
+  setTimeout(initgooglemaps, 3000);
+</script>
 
 </html>
