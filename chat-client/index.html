@@ -110,10 +110,10 @@
           <input id="recipient" v-model="recipient"/>
           <button class="searchButton" @click="searchRecipient">Search</button>
           <span id="progress"></span> &nbsp;
-          <label for="actorID">
+          <!-- <label for="actorID">
             <b>Actor ID: </b>
             <input id="actorID" v-model="actorID" />
-          </label>
+          </label> -->
         </p>
         <hr><br><br>
 
@@ -126,7 +126,7 @@
             
 
             <input type="file" @change="onImageAttachment" accept="image/png, image/jpeg" />
-            <input class="typemessage" v-model="messageText" placeholder=" Type a message..." />
+            <input class="typemessage" @input="resetLocationvalue" v-model="messageText" placeholder=" Type a message..." />
             <input class="sendbutton" type="submit" value="Send" />
           </div> &nbsp;
         </form>
@@ -166,8 +166,8 @@
               <div>
                 <!-- <b>Name: </b> -->
                 <pro :actor="message.actor"></pro>
-                <name class="name" :actor="message.actor"></name> <span>@{{
-                  getUsername(message.actor) }}</span>
+                <name class="name" :actor="message.actor"></name> 
+                <span>{{ getUsername(message.actor) }}</span>
                 <!-- &nbsp; <b>Actor ID:</b> {{ message.actor }} -->
                 <div class="deletedit">
                   <template v-if="message.actor==$gf.me">
@@ -180,7 +180,7 @@
                     </button> -->
                   </template>
                 </div>
-                <div class="time">{{ message.published }}</div>
+                <div class="time">{{ message.published.substring(0, 10) + " at " + message.published.substring(11, 16) }}</div>
 
               </div>
 
@@ -267,8 +267,8 @@
 
     <!-- If we're in the editing state, create something to edit the name-->
     <form v-else @submit.prevent="saveName">
-      <input v-model="editText" />
-      <input type="submit" value="Save Name" />
+      <input class="nameInput" v-model="editText" />
+      <input class="setName" type="submit" value="Save Name" />
     </form>
   </template>
 
@@ -357,7 +357,10 @@
       console.log("place changed", window.app);
       var place = window.autocomplete.getPlace();
       var input = document.getElementById('autocomplete');
-      window.app.messageLocation = input.value;
+      // alert(window.app.messageLocation);
+      window.app.messageLocation = place.name;
+      input.value = place.name;
+      // alert(window.app.messageLocation);
     });
   }
   setTimeout(initgooglemaps, 3000);

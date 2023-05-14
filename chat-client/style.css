@@ -13,13 +13,13 @@
     /* margin-left: auto;
     margin-right: auto; */
     border: 1px solid #ccc;
-    transition: 300ms;
-    transform: ease-in-out;
+    /* transition: 300ms;
+    transform: ease-in-out; */
 }
 
-.message:hover {
+/* .message:hover {
     transform: scale(1.03);
-}
+} */
 
 #buttonchat {
     cursor: pointer;
@@ -50,9 +50,19 @@ div.message:has(.right) {
     width: 15em;
     height: 2em;
     padding-left: 0.5em;
-    border-radius: 8px 0px 0px 8px;
+    border-radius: 8px;
     border: 1px solid #afafaf;
     float: left;
+    margin-right: 0.5em;
+}
+.nameInput {
+    width: 10em;
+    height: 2em;
+    padding-left: 0.5em;
+    border-radius: 8px;
+    border: 1px solid #afafaf;
+    float: left;
+    margin-right: 0.5em;
 }
 
 #channelText {
@@ -66,7 +76,17 @@ div.message:has(.right) {
 .setUsername {
     width: 8em;
     height: 2.3em;
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid #afafaf;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+.setName {
+    width: 7em;
+    height: 2.3em;
+    border-radius: 8px;
     background-color: #f1e7fe;
     border: 1px solid #afafaf;
     cursor: pointer;
@@ -413,6 +433,19 @@ input::file-selector-button:hover {
     background-color: #ccc;
 }
 
+input[type="submit" i] {
+    padding: 0.5em;
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid #afafaf;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+input[type="submit" i]:hover {
+    background-color: #ccc;
+}
+
 
 .locationMarker *{
     vertical-align: middle;
@@ -424,6 +457,6 @@ input[type='file'] {
 
 
 hr {
-    width: 54em;
+    width: 85%;
     float: left;
 }

@@ -130,7 +130,6 @@ const app = {
     },
 
     locations() {
-      console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
       let locations = [];
       for (const message of this.messages) {
           if (message.location != null && message.location != ""){
@@ -158,6 +157,10 @@ const app = {
       const file = event.target.files[0]
       console.log(file.name);
       this.file = file;
+    },
+
+    resetLocationvalue() {
+      this.messageLocation = window.autocomplete.getPlace().name;
     },
 
     searchRecipient() {
@@ -200,14 +203,14 @@ const app = {
       this.usernameLookup[actorID] = actorID;
       this.resolver.actorToUsername(actorID).then((result) => {
         if (result) {
-          this.usernameLookup[actorID] = result;
+          this.usernameLookup[actorID] = '@' + result;
           // console.log("result: " + result + "actorID: " + actorID);
           this.updateUsernameinpage(actorID, result);
           // return result;
         }
         else {
-          // this.usernameLookup[actorID] = "Not Found";
-          this.updateUsernameinpage(actorID, actorID);
+          this.usernameLookup[actorID] = " ";
+          // this.updateUsernameinpage(actorID, actorID);
         }
       });
       return "Not Found";
@@ -223,7 +226,6 @@ const app = {
         location: this.messageLocation,
         content: this.messageText,
       }
-      this.messageLocation = window.autocomplete.getPlace().name
 
       // The context field declares which
       // channel(s) the object is posted in
